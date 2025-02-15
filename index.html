@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #0000FF;
+        }
+        #gameCanvas {
+            border: 2px solid #FFFFFF;
+            background-color: #0000FF;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="300" height="600"></canvas>
+    <script>
+        // Set up the canvas
+        const canvas = document.getElementById('gameCanvas');
+        const context = canvas.getContext('2d');
+        const ROWS = 20;
+        const COLS = 10;
+        const BLOCK_SIZE = 30;
+        
+        // Game variables
+        let board = [];
+        let currentPiece;
+        
+        function createBoard() {
+            for (let r = 0; r < ROWS; r++) {
+                board[r] = [];
+                for (let c = 0; c < COLS; c++) {
+                    board[r][c] = 0;
+                }
+            }
+        }
+
+        function drawBoard() {
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    drawBlock(c, r, board[r][c]);
+                }
+            }
+        }
+
+        function drawBlock(x, y, color) {
+            context.fillStyle = color ? '#FF0000' : '#0000FF';
+            context.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+            context.strokeStyle = '#FFFFFF';
+            context.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+        }
+
+        function drawPiece(piece, x, y) {
+            for (let r = 0; r < piece.length; r++) {
+                for (let c = 0; c < piece[r].length; c++) {
+                    if (piece[r][c]) {
+                        drawBlock(x + c, y + r, 1);
+                    }
+                }
+            }
+        }
+
+        // Initialize the game
+        createBoard();
+        drawBoard();
+
+        // Draw a test piece
+        const testPiece = [
+            [1, 1, 1],
+            [0, 1, 0]
+        ];
+        drawPiece(testPiece, 4, 0);
+    </script>
+</body>
+</html>
+
+
