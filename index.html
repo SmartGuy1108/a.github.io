@@ -33,17 +33,11 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        #score {
-            font-size: 24px;
-            color: #FFFFFF;
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="300" height="600"></canvas>
     <div id="controls">
-        <div id="score">Score: 0</div>
         <button class="button" id="leftBtn">Left</button>
         <button class="button" id="rightBtn">Right</button>
         <button class="button" id="downBtn">Down</button>
@@ -62,7 +56,6 @@
         let currentPiece;
         let currentX;
         let currentY;
-        let score = 0;
         let lastTime = 0;
         let dropCounter = 0;
         let dropInterval = 500; // milliseconds
@@ -134,7 +127,6 @@
                 drawGame();
             } else if (dy !== 0) {
                 lockPiece();
-                clearLines();
                 newPiece();
             }
         }
@@ -160,28 +152,6 @@
                     }
                 }
             }
-        }
-
-        function clearLines() {
-            for (let r = ROWS - 1; r >= 0; r--) {
-                let isFullLine = true;
-                for (let c = 0; c < COLS; c++) {
-                    if (!board[r][c]) {
-                        isFullLine = false;
-                        break;
-                    }
-                }
-                if (isFullLine) {
-                    board.splice(r, 1);
-                    board.unshift(new Array(COLS).fill(0));
-                    score += 10;
-                    updateScore();
-                }
-            }
-        }
-
-        function updateScore() {
-            document.getElementById('score').innerText = 'Score: ' + score;
         }
 
         function drawGame() {
