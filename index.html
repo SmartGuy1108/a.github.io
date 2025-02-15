@@ -11,16 +11,31 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #00008B;
+            background-color: #000000; /* Black background */
         }
         #gameCanvas {
             border: 2px solid #FFFFFF;
-            background-color: #00008B;
+            background-color: #000000; /* Black background */
+        }
+        .button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #FFFFFF;
+            color: #000000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="300" height="600"></canvas>
+    <div id="controls">
+        <button class="button" id="leftBtn">Left</button>
+        <button class="button" id="rightBtn">Right</button>
+        <button class="button" id="downBtn">Down</button>
+    </div>
     <script>
         // Set up the canvas
         const canvas = document.getElementById('gameCanvas');
@@ -60,5 +75,67 @@
         }
 
         function drawBlock(x, y, color) {
-            context.fillStyle = color ? '#FF0000' : '#00008B';
+            context.fillStyle = color ? '#FF0000' : '#000000';
             context.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+            context.strokeStyle = '#FFFFFF';
+            context.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+        }
+
+        function drawPiece(piece, x, y) {
+            for (let r = 0; r < piece.length; r++) {
+                for (let c = 0; c < piece[r].length; c++) {
+                    if (piece[r][c]) {
+                        drawBlock(x + c, y + r, 1);
+                    }
+                }
+            }
+        }
+
+        function movePiece(dx, dy) {
+            currentX += dx;
+            currentY += dy;
+            drawGame();
+        }
+
+        function drawGame() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            drawBoard();
+            drawPiece(currentPiece, currentX, currentY);
+        }
+
+        function gameLoop() {
+            movePiece(0, 1); // Move piece down
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowLeft') {
+                movePiece(-1, 0); // Move piece left
+            } else if (event.key === 'ArrowRight') {
+                movePiece(1, 0); // Move piece right
+            } else if (event.key === 'ArrowDown') {
+                movePiece(0, 1); // Move piece down faster
+            }
+        });
+
+        document.getElementById('leftBtn').addEventListener('click', function() {
+            movePiece(-1, 0); // Move piece left
+        });
+
+        document.getElementById('rightBtn').addEventListener('click', function() {
+            movePiece(1, 0); // Move piece right
+        });
+
+        document.getElementById('downBtn').addEventListener('click', function() {
+            movePiece(0, 1); // Move piece down
+        });
+
+        // Initialize the game
+        createBoard();
+        drawBoard();
+        currentPiece = TETROMINOS[0]; // Use the T shape
+        drawGame();
+        gameInterval = setInterval(gameLoop, 500); // Move piece down every 500ms
+    </script>
+</body>
+</html>
+
