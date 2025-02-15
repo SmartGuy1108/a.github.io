@@ -11,11 +11,11 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #0000FF;
+            background-color: #00008B;
         }
         #gameCanvas {
             border: 2px solid #FFFFFF;
-            background-color: #0000FF;
+            background-color: #00008B;
         }
     </style>
 </head>
@@ -32,7 +32,16 @@
         // Game variables
         let board = [];
         let currentPiece;
-        
+        let currentX = 4;
+        let currentY = 0;
+        let gameInterval;
+
+        // Tetromino shapes
+        const TETROMINOS = [
+            [[1, 1, 1], [0, 1, 0]], // T shape
+            // Add more Tetrominos here
+        ];
+
         function createBoard() {
             for (let r = 0; r < ROWS; r++) {
                 board[r] = [];
@@ -51,34 +60,5 @@
         }
 
         function drawBlock(x, y, color) {
-            context.fillStyle = color ? '#FF0000' : '#0000FF';
+            context.fillStyle = color ? '#FF0000' : '#00008B';
             context.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-            context.strokeStyle = '#FFFFFF';
-            context.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-        }
-
-        function drawPiece(piece, x, y) {
-            for (let r = 0; r < piece.length; r++) {
-                for (let c = 0; c < piece[r].length; c++) {
-                    if (piece[r][c]) {
-                        drawBlock(x + c, y + r, 1);
-                    }
-                }
-            }
-        }
-
-        // Initialize the game
-        createBoard();
-        drawBoard();
-
-        // Draw a test piece
-        const testPiece = [
-            [1, 1, 1],
-            [0, 1, 0]
-        ];
-        drawPiece(testPiece, 4, 0);
-    </script>
-</body>
-</html>
-
-
