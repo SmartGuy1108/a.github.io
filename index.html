@@ -35,7 +35,7 @@
         <button class="button" id="leftBtn">Left</button>
         <button class="button" id="rightBtn">Right</button>
         <button class="button" id="downBtn">Down</button>
-        <button class="button" id="rotateBtn">Rotate</button>
+        <button class="button" id="rotateBtn">Random Shape</button>
     </div>
     <script>
         // Set up the canvas
@@ -123,17 +123,17 @@
             }
         }
 
-        function rotatePiece(piece) {
-            const rotated = piece.map((row, y) => piece.map((val, x) => piece[piece.length - 1 - x][y]));
-            return rotated;
-        }
-
-        function rotateCurrentPiece() {
-            const rotatedPiece = rotatePiece(currentPiece.shape);
-            if (isValidMove(rotatedPiece, currentX, currentY)) {
-                currentPiece.shape = rotatedPiece;
-                drawGame();
+        function changeToRandomShape() {
+            const randomIndex = Math.floor(Math.random() * TETROMINOS.length);
+            currentPiece = TETROMINOS[randomIndex];
+            currentX = 4;
+            currentY = 0;
+            if (!isValidMove(currentPiece.shape, currentX, currentY)) {
+                // Game over
+                clearInterval(gameInterval);
+                alert('Game Over');
             }
+            drawGame();
         }
 
         function lockPiece() {
@@ -175,8 +175,6 @@
                 movePiece(1, 0); // Move piece right
             } else if (event.key === 'ArrowDown') {
                 movePiece(0, 1); // Move piece down faster
-            } else if (event.key === 'ArrowUp') {
-                rotateCurrentPiece(); // Rotate piece
             }
         });
 
@@ -193,7 +191,7 @@
         });
 
         document.getElementById('rotateBtn').addEventListener('click', function() {
-            rotateCurrentPiece(); // Rotate piece
+            changeToRandomShape(); // Change to random shape
         });
 
         // Initialize the game
@@ -204,4 +202,5 @@
     </script>
 </body>
 </html>
+
 
