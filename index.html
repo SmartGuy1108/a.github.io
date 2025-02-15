@@ -9,39 +9,23 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
             height: 100vh;
             margin: 0;
-            background-color: #1d1d1d; /* Dark background */
-            font-family: 'Arial', sans-serif;
-        }
-        #gameCanvas {
-            border: 4px solid #FFFFFF;
             background-color: #000000; /* Black background */
         }
-        #controls {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
+        #gameCanvas {
+            border: 2px solid #FFFFFF;
+            background-color: #000000; /* Black background */
         }
         .button {
             margin: 5px;
             padding: 10px 20px;
             font-size: 16px;
             background-color: #FFFFFF;
-            color: #1d1d1d;
+            color: #000000;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .button:hover {
-            background-color: #1d1d1d;
-            color: #FFFFFF;
-        }
-        .button:active {
-            background-color: #FF0000;
-            color: #FFFFFF;
         }
     </style>
 </head>
@@ -154,7 +138,7 @@
 
         function lockPiece() {
             for (let r = 0; r < currentPiece.shape.length; r++) {
-                for (let c = 0; c < piece[r].length; c++) {
+                for (let c = 0; c < currentPiece.shape[r].length; c++) {
                     if (currentPiece.shape[r][c]) {
                         board[currentY + r][currentX + c] = currentPiece.color;
                     }
