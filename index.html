@@ -124,7 +124,14 @@
         }
 
         function rotatePiece(piece) {
-            const rotated = piece[0].map((_, index) => piece.map(row => row[index]).reverse());
+            const N = piece.length;
+            let rotated = [];
+            for (let y = 0; y < N; ++y) {
+                rotated[y] = [];
+                for (let x = 0; x < N; ++x) {
+                    rotated[y][x] = piece[N - 1 - x][y];
+                }
+            }
             return rotated;
         }
 
@@ -204,4 +211,5 @@
     </script>
 </body>
 </html>
+
 
