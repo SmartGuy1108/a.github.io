@@ -35,6 +35,7 @@
         <button class="button" id="leftBtn">Left</button>
         <button class="button" id="rightBtn">Right</button>
         <button class="button" id="downBtn">Down</button>
+        <button class="button" id="rotateBtn">Rotate</button>
     </div>
     <script>
         // Set up the canvas
@@ -122,6 +123,19 @@
             }
         }
 
+        function rotatePiece(piece) {
+            const rotated = piece.map((_, index) => piece.map(row => row[index]).reverse());
+            return rotated;
+        }
+
+        function rotateCurrentPiece() {
+            const rotatedPiece = rotatePiece(currentPiece.shape);
+            if (isValidMove(rotatedPiece, currentX, currentY)) {
+                currentPiece.shape = rotatedPiece;
+                drawGame();
+            }
+        }
+
         function lockPiece() {
             for (let r = 0; r < currentPiece.shape.length; r++) {
                 for (let c = 0; c < currentPiece.shape[r].length; c++) {
@@ -161,6 +175,8 @@
                 movePiece(1, 0); // Move piece right
             } else if (event.key === 'ArrowDown') {
                 movePiece(0, 1); // Move piece down faster
+            } else if (event.key === 'ArrowUp') {
+                rotateCurrentPiece(); // Rotate piece
             }
         });
 
@@ -176,6 +192,10 @@
             movePiece(0, 1); // Move piece down
         });
 
+        document.getElementById('rotateBtn').addEventListener('click', function() {
+            rotateCurrentPiece(); // Rotate piece
+        });
+
         // Initialize the game
         createBoard();
         drawBoard();
@@ -184,4 +204,5 @@
     </script>
 </body>
 </html>
+
 
