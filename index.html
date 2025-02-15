@@ -17,6 +17,12 @@
             border: 2px solid #FFFFFF;
             background-color: #000000; /* Black background */
         }
+        #controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-left: 20px;
+        }
         .button {
             margin: 5px;
             padding: 10px 20px;
@@ -27,11 +33,17 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        #score {
+            font-size: 24px;
+            color: #FFFFFF;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="300" height="600"></canvas>
     <div id="controls">
+        <div id="score">Score: 0</div>
         <button class="button" id="leftBtn">Left</button>
         <button class="button" id="rightBtn">Right</button>
         <button class="button" id="downBtn">Down</button>
@@ -51,6 +63,7 @@
         let currentX;
         let currentY;
         let gameInterval;
+        let score = 0;
 
         // Tetromino shapes and colors
         const TETROMINOS = [
@@ -119,6 +132,7 @@
                 drawGame();
             } else if (dy !== 0) {
                 lockPiece();
+                clearLines();
                 newPiece();
             }
         }
@@ -146,16 +160,26 @@
             }
         }
 
-        function newPiece() {
-            const randomIndex = Math.floor(Math.random() * TETROMINOS.length);
-            currentPiece = TETROMINOS[randomIndex];
-            currentX = 4;
-            currentY = 0;
-            if (!isValidMove(currentPiece.shape, currentX, currentY)) {
-                // Game over
-                clearInterval(gameInterval);
-                alert('Game Over');
+        function clearLines() {
+            for (let r = ROWS - 1; r >= 0; r--) {
+                let isFullLine = true;
+                for (let c = 0; c < COLS; c++) {
+                    if (!board[r][c]) {
+                        isFullLine = false;
+                        break;
+                    }
+                }
+                if (isFullLine) {
+                    board.splice(r, 1);
+                    board.unshift(new Array(COLS).fill(0));
+                    score += 10;
+                    updateScore();
+                }
             }
+        }
+
+        function updateScore() {
+            document.getElementById('score').innerText = 'Score: ' + score;
         }
 
         function drawGame() {
@@ -202,3 +226,4 @@
     </script>
 </body>
 </html>
+
