@@ -1,50 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tetris Game</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #000000; /* Black background */
-        }
-        #gameCanvas {
-            border: 2px solid #FFFFFF;
-            background-color: #000000; /* Black background */
-        }
-        .button {
-            margin: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #FFFFFF;
-            color: #000000;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #score {
-            color: #FFFFFF;
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div id="score">Score: 0</div>
-    <canvas id="gameCanvas" width="300" height="600"></canvas>
-    <div id="controls">
-        <button class="button" id="leftBtn">Left</button>
-        <button class="button" id="rightBtn">Right</button>
-        <button class="button" id="downBtn">Down</button>
-        <button class="button" id="rotateBtn">Change Shape</button>
-    </div>
-    <script>
+
         // Set up the canvas
         const canvas = document.getElementById('gameCanvas');
         const context = canvas.getContext('2d');
@@ -131,7 +85,6 @@
                 lockPiece();
                 clearLines();
                 newPiece();
-                drawGame();
             }
         }
 
@@ -237,3 +190,6 @@
 
         // Initialize the game
         createBoard();
+        drawBoard();
+        new
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Tetris Game</title> <style> body { display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #000000; /* Black background */ } #gameCanvas { border: 2px solid #FFFFFF; background-color: #000000; /* Black background */ } .button { margin: 5px; padding: 10px 20px; font-size: 16px; background-color: #FFFFFF; color: #000000; border: none; border-radius: 5px; cursor: pointer; } </style> </head> <body> <canvas id="gameCanvas" width="300" height="600"></canvas> <div id="controls"> <button class="button" id="leftBtn">Left</button> <button class="button" id="rightBtn">Right</button> <button class="button" id="downBtn">Down</button> <button class="button" id="rotateBtn">Change Shape</button> </div> <script> // Set up the canvas const canvas = document.getElementById('gameCanvas'); const context = canvas.getContext('2d'); const ROWS = 20; const COLS = 10; const BLOCK_SIZE = 30; // Game variables let board = []; let currentPiece; let currentX; let currentY; let gameInterval; // Tetromino shapes and colors const TETROMINOS = [ { shape: [[1, 1, 1], [0, 1, 0]], color: '#FF0000' }, // T shape { shape: [[1, 1], [1, 1]], color: '#00FF00' }, // O shape { shape: [[1, 1, 0], [0, 1, 1]], color: '#0000FF' }, // S shape { shape: [[0, 1, 1], [1, 1, 0]], color: '#FFFF00' }, // Z shape { shape: [[1, 1, 1, 1]], color: '#FF00FF' }, // I shape { shape: [[1, 1, 1], [1, 0, 0]], color: '#00FFFF' }, // L shape { shape: [[1, 1, 1], [0, 0, 1]], color: '#FFA500' }, // J shape ]; function createBoard() { for (let r = 0; r < ROWS; r++) { board[r] = []; for (let c = 0; c < COLS; c++) { board[r][c] = 0; } } } function drawBoard() { for (let r = 0; r < ROWS; r++) { for (let c = 0; c < COLS; c++) { drawBlock(c, r, board[r][c]); } } } function drawBlock(x, y, color) { context.fillStyle = color || '#000000'; context.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE); context.strokeStyle = '#FFFFFF'; context.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE); } function drawPiece(piece, x, y, color) { for (let r = 0; r < piece.length; r++) { for (let c = 0; c < piece[r].length; c++) { if (piece[r][c]) { drawBlock(x + c, y + r, color); } } } } function isValidMove(piece, x, y) { for (let r = 0; r < piece.length; r++) { for (let c = 0; c < piece[r].length; c++) { if (piece[r][c]) { let newX = x + c; let newY = y + r; if (newX < 0 || newX >= COLS || newY >= ROWS || board[newY][newX]) { return false; } } } } return true; } function movePiece(dx, dy) { if (isValidMove(currentPiece.shape, currentX + dx, currentY + dy)) { currentX += dx; currentY += dy; drawGame(); } else if (dy !== 0) { lockPiece(); newPiece(); } } function changeToRandomShape() { const randomIndex = Math.floor(Math.random() * TETROMINOS.length); currentPiece = TETROMINOS[randomIndex]; currentX = 4; currentY = 0; if (!isValidMove(currentPiece.shape, currentX, currentY)) { // Game over clearInterval(gameInterval); alert('Game Over'); } drawGame(); } function lockPiece() { for (let r = 0; r < currentPiece.shape.length; r++) { for (let c = 0; c < currentPiece.shape[r].length; c++) { if (currentPiece.shape[r][c]) { board[currentY + r][currentX + c] = currentPiece.color; } } } } function newPiece() { const randomIndex = Math.floor(Math.random() * TETROMINOS.length); currentPiece = TETROMINOS[randomIndex]; currentX = 4; currentY = 0; if (!isValidMove(currentPiece.shape, currentX, currentY)) { // Game over clearInterval(gameInterval); alert('Game Over'); } } function drawGame() { context.clearRect(0, 0, canvas.width, canvas.height); drawBoard(); drawPiece(currentPiece.shape, currentX, currentY, currentPiece.color); } function gameLoop() { movePiece(0, 1); // Move piece down } document.addEventListener('keydown', function(event) { if (event.key === 'ArrowLeft') { movePiece(-1, 0); // Move piece left } else if (event.key === 'ArrowRight') { movePiece(1, 0); // Move piece right } else if (event.key === 'ArrowDown') { movePiece(0, 1); // Move piece down faster } }); document.getElementById('leftBtn').addEventListener('click', function() { movePiece(-1, 0); // Move piece left }); document.getElementById('rightBtn').addEventListener('click', function() { movePiece(1, 0); // Move piece right }); document.getElementById('downBtn').addEventListener('click', function() { movePiece(0, 1); // Move piece down }); document.getElementById('rotateBtn').addEventListener('click', function() { changeToRandomShape(); // Change to random shape }); // Initialize the game createBoard(); drawBoard(); newPiece(); gameInterval = setInterval(gameLoop, 500); // Move piece down every 500ms </script> </body> </html>
