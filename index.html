@@ -64,6 +64,9 @@
         let currentY;
         let gameInterval;
         let score = 0;
+        let lastTime = 0;
+        let dropCounter = 0;
+        let dropInterval = 500; // milliseconds
 
         // Tetromino shapes and colors
         const TETROMINOS = [
@@ -144,7 +147,7 @@
             currentY = 0;
             if (!isValidMove(currentPiece.shape, currentX, currentY)) {
                 // Game over
-                clearInterval(gameInterval);
+                cancelAnimationFrame(gameInterval);
                 alert('Game Over');
             }
             drawGame();
@@ -188,8 +191,16 @@
             drawPiece(currentPiece.shape, currentX, currentY, currentPiece.color);
         }
 
-        function gameLoop() {
-            movePiece(0, 1); // Move piece down
+        function gameLoop(timestamp) {
+            if (!lastTime) lastTime = timestamp;
+            const deltaTime = timestamp - lastTime;
+            dropCounter += deltaTime;
+            if (dropCounter > dropInterval) {
+                movePiece(0, 1); // Move piece down
+                dropCounter = 0;
+            }
+            lastTime = timestamp;
+            gameInterval = requestAnimationFrame(gameLoop);
         }
 
         document.addEventListener('keydown', function(event) {
@@ -222,8 +233,7 @@
         createBoard();
         drawBoard();
         newPiece();
-        gameInterval = setInterval(gameLoop, 250); // Move piece down every 250ms
+        gameInterval = requestAnimationFrame(gameLoop); // Start the game loop
     </script>
 </body>
 </html>
-
